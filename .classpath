@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="lib/EJML-experimental-0.26.jar"/>
+	<classpathentry kind="lib" path="lib/EJML-core-0.26.jar"/>
+	<classpathentry kind="lib" path="lib/EJML-equation-0.26.jar"/>
+	<classpathentry kind="lib" path="lib/JLargeArrays-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jscience.jar"/>
+	<classpathentry kind="lib" path="lib/JTransforms-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/streamjit.jar"/>
+	<classpathentry kind="lib" path="lib/weka-3.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/asm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/bridj.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/guava.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/javax.json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/joptsimple.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/ServiceProviderProcessor.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/sqlitejdbc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/bytecodelib.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
