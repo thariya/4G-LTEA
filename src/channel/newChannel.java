@@ -113,28 +113,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			path_gains[8] = -7;
 			dopp_freq = 70;
 			no_taps = 9;
-		} else if(channel_type.equals("test 0Hz")){// ETU 300Hz
-			path_delays[1] = 0;
-			path_delays[2] = 0;
-			path_delays[3] = 0;
-			path_delays[4] = 0;
-			path_delays[5] = 0;
-			path_delays[6] = 0;
-			path_delays[7] = 0;
-			path_delays[8] = 0;
-
-			path_gains[0] = 1;
-			path_gains[1] = 0;
-			path_gains[2] = 0;
-			path_gains[3] = 0;
-			path_gains[4] = 0;
-			path_gains[5] = 0;
-			path_gains[6] = 0;
-			path_gains[7] = 0;
-			path_gains[8] = 0;
-			dopp_freq = 0;
-			no_taps = 1;
-		}else{
+		} else if(channel_type.equals("ETU 300Hz")){// ETU 300Hz	
 			path_delays[1] = 50;
 			path_delays[2] = 120;
 			path_delays[3] = 200;
@@ -155,6 +134,27 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			path_gains[8] = -7;
 			dopp_freq = 300;
 			no_taps = 9;
+		}else{							
+			path_delays[1] = 0;
+			path_delays[2] = 0;
+			path_delays[3] = 0;
+			path_delays[4] = 0;
+			path_delays[5] = 0;
+			path_delays[6] = 0;
+			path_delays[7] = 0;
+			path_delays[8] = 0;
+
+			path_gains[0] = 1;
+			path_gains[1] = 0;
+			path_gains[2] = 0;
+			path_gains[3] = 0;
+			path_gains[4] = 0;
+			path_gains[5] = 0;
+			path_gains[6] = 0;
+			path_gains[7] = 0;
+			path_gains[8] = 0;
+			dopp_freq = 0;
+			no_taps = 1;
 		}
 		// ////////////////////////////////////////
 

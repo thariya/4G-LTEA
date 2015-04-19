@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="lib/JLargeArrays-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jscience.jar"/>
 	<classpathentry kind="lib" path="lib/JTransforms-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/streamjit.jar"/>
 	<classpathentry kind="lib" path="lib/weka-3.7.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/asm.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/bridj.jar"/>
@@ -18,5 +17,6 @@
 	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/ServiceProviderProcessor.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/sqlitejdbc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tharindu/Documents/Eclipse Workspace/FYP/LTE_A/lib/bytecodelib.jar"/>
+	<classpathentry kind="lib" path="lib/streamjit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

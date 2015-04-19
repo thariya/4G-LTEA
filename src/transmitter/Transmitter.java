@@ -117,31 +117,24 @@ public class Transmitter {
 	
 	private static class Filer extends
 	edu.mit.streamjit.api.Filter<Float,Float> {
-		FileOutputStream out;
-		BufferedOutputStream buffout;
-//		FileInputStream in;
-//		BufferedInputStream buffin;
+		DataOutputStream out;
 		public Filer(String name) {
 			super(1, 1);
 			out=null;
 			
 			try {
-				out = new FileOutputStream("src/channel/"+name);
-//				in = new FileInputStream("src/edu/mit/streamjit/channel/"+name);
+				out = new DataOutputStream(new FileOutputStream("src/channel/"+name));				
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			buffout=new BufferedOutputStream(out, 4);
-//			buffin=new BufferedInputStream(in, 4);
 		}
 		
 		@Override
 		public void work() {
 			float a = pop();
 			try {
-				buffout.write(ByteBuffer.allocate(4).putFloat(a).array());
-				
+				out.writeFloat(a);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

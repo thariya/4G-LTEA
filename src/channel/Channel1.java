@@ -465,50 +465,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 	}
 }
 
-class DFTARRAY {
 
-	Complex[][] DF;
-
-	DFTARRAY() {
-		DF = new Complex[16][16];
-		Complex val = Complex.valueOf(0, 0);
-		for (int i = 0; i < DF.length / 2; i++) {
-			for (int j = 0; j < DF.length / 2; j++) {
-				val = Complex.valueOf(0, -1 * (2 * Math.PI * (i) * (j) / 8))
-						.exp();
-				if (Math.abs(val.getReal()) < Math.pow(10, -10)) {
-					val = Complex.valueOf(0, val.getImaginary());
-				}
-				if (Math.abs(val.getImaginary()) < Math.pow(10, -10)) {
-					val = Complex.valueOf(val.getReal(), 0);
-				}
-
-				DF[i][j] = val;
-
-				DF[i + 8][j + 8] = DF[i][j];
-				DF[i][j + 8] = Complex.valueOf(0, 0);
-				DF[i + 8][j] = Complex.valueOf(0, 0);
-			}
-		}
-
-	}
-
-	public Complex[][] getDFT() {
-		return DF;
-	}
-	
-	public void printDFT() {
-		System.out.println("DFT Matrix :");
-		for (int i = 0; i < DF.length; i++) {
-			for (int j = 0; j < DF.length; j++) {
-				System.out.print(DF[i][j] + " \t ");
-			}
-			System.out.println();
-		}
-
-	}
-	
-}
 
 
 

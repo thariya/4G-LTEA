@@ -24,7 +24,7 @@ public class LSDTree {
 	private ArrayList<Node> nextlevel;
 	Matrix R_mat;
 
-	LSDTree(double R, int K) {
+	public LSDTree(double R, int K) {
 
 		this.root = new Node(0, null);
 		this.root.setvalue(0);
@@ -43,7 +43,7 @@ public class LSDTree {
 		root.printNodes();
 	}
 
-	void generateFirstlevel(double y) {
+	public void generateFirstlevel(double y) {
 
 		int count = 0;
 		double temp = 0;
@@ -122,11 +122,11 @@ public class LSDTree {
 
 	}
 
-	void setRMatrix(Matrix R) {
+	public void setRMatrix(Matrix R) {
 		R_mat = R;
 	}
 
-	void generateNextlevel(double y, int level) {
+	public void generateNextlevel(double y, int level) {
 		int count = 0;
 		double temp = 0;
 		int index = 0;
@@ -349,125 +349,127 @@ public class LSDTree {
 		return true;
 
 	}
-
-}
-
-class Node {
-	final int S_values[] = { -7, -5, -3, -1, 1, 3, 5, 7 };
-	private int S;
-
-	private double value;
-	private Node parent;
-	private ArrayList<Node> nextlevel;
-
-	// constructor
-	Node(int i, Node parent) {
-		this.S = S_values[i];
-		this.parent = parent;
-		this.nextlevel = new ArrayList<>();
-		this.value = 0;
-	}
-
-	Node(int i, Node parent, double value) {
-		this.S = S_values[i];
-		this.parent = parent;
-		this.nextlevel = new ArrayList<>();
-		this.value = value;
-	}
-
-	// //////////////////////////////////////////////////
-	public void setvalue(double value) {
-		this.value = value;
-	}
-
-	public void copyNode(int S, double value, Node Parent) {
-		this.S = S;
-		this.value = value;
-		this.parent = Parent;
-	}
-
-	public void copyNode(int S, double value, Node Parent, ArrayList<Node> next) {
-		this.S = S;
-		this.value = value;
-		this.parent = Parent;
-		this.nextlevel = next;
-	}
-
-	public Node findNode_with_S(int s) {
-
-		for (Iterator<Node> iterator = nextlevel.iterator(); iterator.hasNext();) {
-			Node node = (Node) iterator.next();
-			if (node.S == s) {
-				return node;
-			}
-		}
-		return null;
-
-	}
-
-	// //////////////////////////////////////////////////
-	public double getvalue() {
-		return value;
-	}
-
-	public int getNode_S() {
-		return S;
-	}
-
-	public Node getparent() {
-		return parent;
-	}
-
-	public ArrayList<Node> getnextlevel() {
-		return nextlevel;
-	}
-
-	public void addNodetonextlevel(int i, Node parent, double value) {
-		this.nextlevel.add(new Node(i, parent, value));
-	}
-
-	// //////////////////////////////////////////////////
-	public void printnum() {
-		System.out.println(S + " : ");
-
-	}
-
-	public void printvalue() {
-		System.out.println("value : " + value);
-
-	}
-
-	public void printNumValue() {
-		System.out.println(S + " : " + value);
-	}
 	
-	void printParents(){
-		Node temp=new Node(1,null);
-		temp=parent;
-		while(temp!=null){
-			System.out.print("("+parent.getNode_S()+" : "+parent.getvalue()+") \t");
-			temp=temp.getparent();
+	public class Node {
+		final int S_values[] = { -7, -5, -3, -1, 1, 3, 5, 7 };
+		private int S;
+
+		private double value;
+		private Node parent;
+		private ArrayList<Node> nextlevel;
+
+		// constructor
+		Node(int i, Node parent) {
+			this.S = S_values[i];
+			this.parent = parent;
+			this.nextlevel = new ArrayList<>();
+			this.value = 0;
 		}
-	}
-	
 
+		Node(int i, Node parent, double value) {
+			this.S = S_values[i];
+			this.parent = parent;
+			this.nextlevel = new ArrayList<>();
+			this.value = value;
+		}
 
-	void printNodes() {
+		// //////////////////////////////////////////////////
+		public void setvalue(double value) {
+			this.value = value;
+		}
 
-		if (nextlevel.size() == 0) {
-			System.out.println("(" + S + " : " + value + ") ! ");
-		} else {
-			
-			for (Iterator<Node> iterator = nextlevel.iterator(); iterator
-					.hasNext();) {
+		public void copyNode(int S, double value, Node Parent) {
+			this.S = S;
+			this.value = value;
+			this.parent = Parent;
+		}
+
+		public void copyNode(int S, double value, Node Parent, ArrayList<Node> next) {
+			this.S = S;
+			this.value = value;
+			this.parent = Parent;
+			this.nextlevel = next;
+		}
+
+		public Node findNode_with_S(int s) {
+
+			for (Iterator<Node> iterator = nextlevel.iterator(); iterator.hasNext();) {
 				Node node = (Node) iterator.next();
-				System.out.print("  ---   ");
-				node.printNodes();
+				if (node.S == s) {
+					return node;
+				}
+			}
+			return null;
+
+		}
+
+		// //////////////////////////////////////////////////
+		public double getvalue() {
+			return value;
+		}
+
+		public int getNode_S() {
+			return S;
+		}
+
+		public Node getparent() {
+			return parent;
+		}
+
+		public ArrayList<Node> getnextlevel() {
+			return nextlevel;
+		}
+
+		public void addNodetonextlevel(int i, Node parent, double value) {
+			this.nextlevel.add(new Node(i, parent, value));
+		}
+
+		// //////////////////////////////////////////////////
+		public void printnum() {
+			System.out.println(S + " : ");
+
+		}
+
+		public void printvalue() {
+			System.out.println("value : " + value);
+
+		}
+
+		public void printNumValue() {
+			System.out.println(S + " : " + value);
+		}
+		
+		void printParents(){
+			Node temp=new Node(1,null);
+			temp=parent;
+			while(temp!=null){
+				System.out.print("("+parent.getNode_S()+" : "+parent.getvalue()+") \t");
+				temp=temp.getparent();
+			}
+		}
+		
+
+
+		void printNodes() {
+
+			if (nextlevel.size() == 0) {
+				System.out.println("(" + S + " : " + value + ") ! ");
+			} else {
+				
+				for (Iterator<Node> iterator = nextlevel.iterator(); iterator
+						.hasNext();) {
+					Node node = (Node) iterator.next();
+					System.out.print("  ---   ");
+					node.printNodes();
+				}
+
+				System.out.println("-->(" + S + " : " + value + ") ");
 			}
 
-			System.out.println("-->(" + S + " : " + value + ") ");
 		}
 
 	}
 
+
 }
+

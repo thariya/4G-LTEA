@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 
 import org.jscience.mathematics.vector.ComplexMatrix;
 
+import receiver.LSDTree.Node;
 import weka.core.matrix.Matrix;
 import weka.core.matrix.QRDecomposition;
 
@@ -85,13 +86,13 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 //		H=Matrix.constructWithCopy(h_temp);	
 //	}
 	
-	static Matrix setup(){		
+	public static Matrix setup(){		
 		
 		double[][] Houtreal = null;
 		double[][] Houtimg = null;
 		try
 		{
-			FileInputStream fileIn = new FileInputStream("channel_matrices_Houtreal.ser");
+			FileInputStream fileIn = new FileInputStream("EPA 5Hz-Low-Houtreal.ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			Houtreal = (double[][]) in.readObject();
 			in.close();
@@ -106,7 +107,7 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 
 		try
 		{
-			FileInputStream fileIn = new FileInputStream("channel_matrices_Houtimg.ser");
+			FileInputStream fileIn = new FileInputStream("EPA 5Hz-Low-Houtimg.ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			Houtimg = (double[][]) in.readObject();
 			in.close();
@@ -133,7 +134,7 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		return H;
 	}
 	
-	static Matrix[] QRD(Matrix Hcopy){
+	public static Matrix[] QRD(Matrix Hcopy){
 		
 		QRDecomposition QRD = new QRDecomposition(Hcopy);
 		Matrix Q=QRD.getQ();
@@ -143,7 +144,7 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		
 	}
 	
-	static void GetLSD_Y(LSDTree tree,Matrix Y){		
+	public static void GetLSD_Y(LSDTree tree,Matrix Y){		
 
 		for (int i = 0; i < 31; i++) {
 			tree.generateNextlevel(Y.get(31-(i+1), 0),i+1);
@@ -230,9 +231,9 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		}
 	}
 	
-	private static class Level {
-		LSDTree t;
-		Matrix Y;
+	public static class Level {
+		public LSDTree t;
+		public Matrix Y;
 		public Level(LSDTree tree, Matrix x) {
 			t=tree;
 			Y=x;

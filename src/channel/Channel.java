@@ -14,7 +14,7 @@ import edu.mit.streamjit.api.Input;
 import edu.mit.streamjit.api.Pipeline;
 import edu.mit.streamjit.api.StreamCompiler;
 import edu.mit.streamjit.impl.compiler2.Compiler2StreamCompiler;
-
+import edu.mit.streamjit.impl.interp.DebugStreamCompiler;
 import edu.mit.streamjit.test.Benchmark;
 import edu.mit.streamjit.test.Benchmarker;
 import edu.mit.streamjit.test.SuppliedBenchmark;
@@ -25,7 +25,7 @@ public class Channel {
 	public static void main(String[] args) throws InterruptedException {
 		
 		//compiler2streamcompiler
-		StreamCompiler sc = new Compiler2StreamCompiler();
+		StreamCompiler sc = new DebugStreamCompiler();
 		Benchmarker.runBenchmark(new ChannelBenchmark(), sc).get(0).print(System.out);
 //		OneToOneElement<Byte, Byte> streamgraph = new Pipeline<>(new TurboEncoder(),new Modulator(),new AntennaArray());
 //		StreamCompiler compiler = new DebugStreamCompiler();
@@ -41,8 +41,8 @@ public class Channel {
 	@ServiceProvider(Benchmark.class)
 	public static final class ChannelBenchmark extends SuppliedBenchmark {
 		public ChannelBenchmark() {
-			super("Channel", ChannelKernel.class, new Dataset("src/channel/ones_transmitter_out",
-					(Input)Input.fromBinaryFile(Paths.get("src/channel/ones_transmitter_out"), Float.class, ByteOrder.BIG_ENDIAN)
+			super("Channel", ChannelKernel.class, new Dataset("src/channel/transmitter_out.out",
+					(Input)Input.fromBinaryFile(Paths.get("src/channel/transmitter_out.out"), Float.class, ByteOrder.BIG_ENDIAN)
 //					, (Supplier)Suppliers.ofInstance((Input)Input.fromBinaryFile(Paths.get("/home/jbosboom/streamit/streams/apps/benchmarks/asplos06/fft/streamit/FFT5.out"), Float.class, ByteOrder.LITTLE_ENDIAN))
 			));
 		}
@@ -51,7 +51,7 @@ public class Channel {
 	public static final class ChannelKernel extends Pipeline<Float, Float> {
 		
 		public ChannelKernel() {
-			this.add(new Channel3());
+			this.add(new Channel3(),new Filer("channel_out.out"));
 		}
 		
 	}
@@ -124,13 +124,7 @@ public class Channel {
 		public Filer(String name) {
 			super(1, 1);
 			out=null;
-			
-			try {
-				out = new DataOutputStream(new FileOutputStream("src/edu/mit/streamjit/receiver/"+name));				
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}		
+			out=getDataStream(out,"src/receiver/"+name);	
 			
 		}
 		
@@ -145,5 +139,17 @@ public class Channel {
 			push(a);
 		
 		}
+		
+		private static DataOutputStream getDataStream(DataOutputStream d,String s){
+			try {
+				d = new DataOutputStream(new FileOutputStream(s));				
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}	
+			return d;
+		}
 	}
+	
+	
 }
