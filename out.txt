@@ -318,4 +318,4 @@
 1
 1
 0
-Compiler2StreamCompiler (512 cores 1 mult) / Receiver / src/receiver/channel_out.out: 6159 ms compile, 1720 ms run; 320 items output, 5.375000 ms/output
+Compiler2StreamCompiler (512 cores 1 mult) / Receiver / src/receiver/channel_out.out: 5600 ms compile, 319 ms run; 320 items output, 0.996875 ms/output

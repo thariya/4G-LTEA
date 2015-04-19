@@ -24,9 +24,9 @@ public class TransmitterTest {
 	
 	public static void main(String[] args) throws InterruptedException {
 		Compiler2StreamCompiler sc = new Compiler2StreamCompiler();
-		for (int i = 16; i <17; i=i*2) {
-			for (int j = 10000; j <20001; j=j+10000) {
-				for (int k =60; k <1000; k=k+5) {
+		for (int i = 4; i <17; i=i*2) {
+			for (int j = 100000; j <200001; j=j+10000) {
+				for (int k =1; k <500; k=k+5) {
 					for (int k2 = 0; k2 < 5; k2++) {
 //						Compiler2StreamCompiler sc = new Compiler2StreamCompiler();					
 						sc.maxNumCores(i);
