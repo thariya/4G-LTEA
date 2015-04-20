@@ -17,10 +17,10 @@ public class ReceiverTest {
 	
 	public static void main(String[] args) throws InterruptedException {
 		Compiler2StreamCompiler sc = new Compiler2StreamCompiler();
-		for (int i = 1; i <257; i=i*2) {
+		for (int i = 1; i <129; i=i*2) {
 			for (int j = 1000; j <2001; j=j+1000) {
-				for (int k =1; k <100; k=k+2) {
-					for (int k2 = 0; k2 < 5; k2++) {
+				for (int k =1; k <1000; k=k+5) {
+					for (int k2 = 0; k2 < 3; k2++) {
 //						Compiler2StreamCompiler sc = new Compiler2StreamCompiler();	
 						sc.maxNumCores(i);
 						sc.multiplier(k);

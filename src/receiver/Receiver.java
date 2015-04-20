@@ -130,7 +130,7 @@ public class Receiver {
 			out=null;
 			
 			try {
-				out = new DataOutputStream(new FileOutputStream("src/edu/mit/streamjit/receiver/"+name));				
+				out = new DataOutputStream(new FileOutputStream(name));				
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -4,13 +4,11 @@ import receiver.LSDTree.Node;
 import weka.core.matrix.Matrix;
 import weka.core.matrix.QRDecomposition;
 
-public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
+public class LSD_Equalizer_linear extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 	
-	public Equalizer(){
+	public LSD_Equalizer_linear(){
 		this.add(new EqualizerPreprocess());	
-		for (int i = 0; i < 31; i++) {
-			this.add(new TreeTraversal(i));
-		}
+		this.add(new TotalTraversal());
 		this.add(new EqualizerTerminal());
 	}
 	
@@ -197,6 +195,23 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		}
 	}
 	
+	
+	private static class TotalTraversal extends edu.mit.streamjit.api.Filter<Level,Level> {
+		
+		public TotalTraversal() {
+			super(1, 1);
+			
+		}
+
+		@Override
+		public void work() {
+			Level l=pop();
+			for (int j = 0; j < 31; j++) {
+				l.t.generateNextlevel(l.Y.get(31-(j+1), 0),j+1);
+			}
+			push(l);
+		}
+	}
 	private static class EqualizerTerminal extends edu.mit.streamjit.api.Filter<Level,Float> {
 		
 		public EqualizerTerminal() {
