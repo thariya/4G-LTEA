@@ -1,9 +1,7 @@
 package channel;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
@@ -16,10 +14,10 @@ import weka.core.matrix.Matrix;
 public class Channel_Generator {
 
 	public static void main(String[] args) {
-		String channel_type="EPA 5Hz";
-		String corr_type="Low";
-		int l=12;
-		double fcarry=2;
+		String channel_type = "EPA 5Hz";
+		String corr_type = "Low";
+		int l = 12;
+		double fcarry = 2;
 		double Eb_No = 10;
 		double lc = (20.0 / 33.0) * Math.pow(10, 0.1 * Eb_No);
 		double sigma = Math.sqrt(3.5 / Math.pow(10, 0.1 * Eb_No));
@@ -27,20 +25,20 @@ public class Channel_Generator {
 		ComplexMatrix H;
 		ComplexMatrix Hinv;
 		ComplexMatrix Hhat;
-		
-		int length=16;
+
+		int length = 16;
 		Matrix sqrt_corr_matrix;
 		double no_taps = 0;
 		int path_delays[] = { 0, 30, 70, 90, 110, 190, 410, 0, 0 };
 		double path_gains[] = { 0, -1, -2, -3, -8, -17.2, -20.8, 0, 0 };
-		
-		String[] corrs={"Low","Medium","High"};
-		String[] types={"EPA 5Hz","EVA 5Hz","EVA 70Hz","ETU 70Hz","ETU 300Hz"};
-		
+
+		String[] corrs = { "Low", "Medium", "High" };
+		String[] types = { "EPA 5Hz", "EVA 5Hz", "EVA 70Hz", "ETU 70Hz", "ETU 300Hz" };
+
 		for (int p = 0; p < types.length; p++) {
 			for (int q = 0; q < corrs.length; q++) {
-				channel_type=types[p];
-				corr_type=corrs[q];
+				channel_type = types[p];
+				corr_type = corrs[q];
 				double tx_corr_coeff = 0.0;
 				double rx_corr_coeff = 0.0;
 
@@ -61,8 +59,7 @@ public class Channel_Generator {
 
 				}
 				double dopp_freq = 6;
-				
-				
+
 				/*
 				 * int[] path_delays; double[] path_gains;
 				 */
@@ -130,7 +127,7 @@ public class Channel_Generator {
 					path_gains[8] = -7;
 					dopp_freq = 70;
 					no_taps = 9;
-				} else if(channel_type.equals("ETU 300Hz")){// ETU 300Hz	
+				} else if (channel_type.equals("ETU 300Hz")) {// ETU 300Hz
 					path_delays[1] = 50;
 					path_delays[2] = 120;
 					path_delays[3] = 200;
@@ -151,7 +148,7 @@ public class Channel_Generator {
 					path_gains[8] = -7;
 					dopp_freq = 300;
 					no_taps = 9;
-				}else{							
+				} else {
 					path_delays[1] = 0;
 					path_delays[2] = 0;
 					path_delays[3] = 0;
@@ -178,31 +175,25 @@ public class Channel_Generator {
 				double[][] valstx = { { 1., tx_corr_coeff }, { tx_corr_coeff, 1. } };
 				double[][] valsrx = { { 1., rx_corr_coeff }, { rx_corr_coeff, 1. } };
 				/*
-				 * Matrix tx_corr_matrix = new Matrix(valstx); Matrix rx_corr_matrix =
-				 * new Matrix(valsrx);
+				 * Matrix tx_corr_matrix = new Matrix(valstx); Matrix
+				 * rx_corr_matrix = new Matrix(valsrx);
 				 */
-				double[][] corr_matrix_val = {
-						{ valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
-								valstx[0][1] * valsrx[0][0],
-								valstx[0][1] * valsrx[0][1] },
+				double[][] corr_matrix_val = { { valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
+						valstx[0][1] * valsrx[0][0], valstx[0][1] * valsrx[0][1] },
 
-						{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1],
-								valstx[0][1] * valsrx[1][0],
+						{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1], valstx[0][1] * valsrx[1][0],
 								valstx[0][1] * valsrx[1][1] },
 
-						{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1],
-								valstx[1][1] * valsrx[0][0],
+						{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1], valstx[1][1] * valsrx[0][0],
 								valstx[1][1] * valsrx[0][1] },
 
-						{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1],
-								valstx[1][1] * valsrx[1][0],
+						{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1], valstx[1][1] * valsrx[1][0],
 								valstx[1][1] * valsrx[1][1] } };
 
 				Matrix corr_matrix = new Matrix(corr_matrix_val);
 
 				sqrt_corr_matrix = corr_matrix.sqrt();
-				
-				
+
 				double[] f = new double[l * 2];
 				for (int k = 0; k < l; ++k) {
 
@@ -210,7 +201,7 @@ public class Channel_Generator {
 					f[l + k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
 
 				}
-				
+
 				Complex H_array[][] = new Complex[2 * l][2 * l];
 				for (int i = 0; i < 2 * l; i++) {
 					for (int j = 0; j < 2 * l; j++) {
@@ -229,27 +220,24 @@ public class Channel_Generator {
 					A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
 
 				}
-				
+
 				Complex B_array[] = A_array;
 
 				for (int i = 0; i < 4; ++i) {
 					B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
 							.plus((A_array[1].times(sqrt_corr_matrix.get(1, i)))
 									.plus((A_array[2].times(sqrt_corr_matrix.get(2, i)))
-											.plus((A_array[3].times(sqrt_corr_matrix
-													.get(3, i))))));
+											.plus((A_array[3].times(sqrt_corr_matrix.get(3, i))))));
 				}
-				
+
 				for (int k = 0; k < l; ++k) {
 
-					
 					// generate random numbers for A
 					for (int i = 0; i < 4; i++) {
-						A_array[i] = Complex.valueOf(ran.nextGaussian(),
-								ran.nextGaussian());
+						A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
 
 					}
-					
+
 					for (int i = 0; i < 4; ++i) {
 						B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
 								.plus(A_array[1].times(sqrt_corr_matrix.get(1, i)))
@@ -261,24 +249,23 @@ public class Channel_Generator {
 					}
 					// B = ComplexMatrix.valueOf(B_array);
 					/*
-					 * System.out.println("B_array : " + B_array[0].toString() + " , " +
-					 * B_array[1].toString());
+					 * System.out.println("B_array : " + B_array[0].toString() +
+					 * " , " + B_array[1].toString());
 					 */
 					tr_1_coeff = Complex.valueOf(1.0, 0.0);
 					tr_2_coeff = Complex.valueOf(1.0, 0.0);
-					// cout<<"EXP : "<<tr_1_coeff(0, 0)<<" : "<<exp(tr_1_coeff(0,
+					// cout<<"EXP : "<<tr_1_coeff(0, 0)<<" :
+					// "<<exp(tr_1_coeff(0,
 					// 0))<<endl;
 					// for m =1:no_taps
 					for (int m = 0; m < no_taps; ++m) {
-						tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k]
-								* path_delays[m]);
-						tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8]
-								* path_delays[m]);
+						tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k] * path_delays[m]);
+						tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8] * path_delays[m]);
 
-						tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-								.plus(tr_1_calc.exp()).plus(tr_1_coeff);
-						tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-								.plus(tr_2_calc.exp()).plus(tr_2_coeff);
+						tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_1_calc.exp())
+								.plus(tr_1_coeff);
+						tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_2_calc.exp())
+								.plus(tr_2_coeff);
 					}
 
 					// 2 by 2 MIMO --> 4Paths
@@ -290,10 +277,9 @@ public class Channel_Generator {
 					H_array[k + l][k + l] = B_array[3].times(tr_2_coeff);
 
 				}
-				
+
 				H = ComplexMatrix.valueOf(H_array);
-//				System.out.println(H);
-				
+				// System.out.println(H);
 
 				Complex H1_array[][] = new Complex[16][16];
 
@@ -326,125 +312,128 @@ public class Channel_Generator {
 				Complex[][] dftArray = dft.getDFT();
 				ComplexMatrix DF = ComplexMatrix.valueOf(dftArray);
 				H_out = H1_mat.times(DF);
-				
-				Hinv=H.inverse();
-				
-				Complex[][] H_temp=new Complex[24][24];
+
+				Hinv = H.inverse();
+
+				Complex[][] H_temp = new Complex[24][24];
 				for (int j = 0; j < 24; j++) {
 					for (int k = 0; k < 24; k++) {
-						H_temp[j][k]= Complex.valueOf(H.get(j, k).getReal(), (-1)*H.get(j, k).getImaginary());  //(i, j)=Complex ;// H.get(i, j).getImaginary();
+						H_temp[j][k] = Complex.valueOf(H.get(j, k).getReal(), (-1) * H.get(j, k).getImaginary()); // (i,
+																													// j)=Complex
+																													// ;//
+																													// H.get(i,
+																													// j).getImaginary();
 					}
 				}
-				Hhat=ComplexMatrix.valueOf(H_temp);
-				Hhat=Hhat.transpose();
-				
+				Hhat = ComplexMatrix.valueOf(H_temp);
+				Hhat = Hhat.transpose();
+
 				///////////////////////////////////////////////////////////
 				Complex Pd_array[][] = new Complex[24][24];
 
 				for (int i = 0; i < 24; i++) {
 
 					for (int j = 0; j < 24; j++) {
-						if(i==j){
+						if (i == j) {
 							Pd_array[i][i] = Complex.valueOf(42.0, 0.0);
-						if (i == 0 || i == 1 || i == 10 || i == 11 || i == 12
-								|| i == 13 || i == 22 || i == 23) {
+							if (i == 0 || i == 1 || i == 10 || i == 11 || i == 12 || i == 13 || i == 22 || i == 23) {
+								Pd_array[i][j] = Complex.valueOf(0.0, 0.0);
+							}
+						} else {
 							Pd_array[i][j] = Complex.valueOf(0.0, 0.0);
-						} 
-						}else{
-							Pd_array[i][j] = Complex.valueOf(0.0, 0.0);
-							
+
 						}
 					}
 				}
 				ComplexMatrix Pd = ComplexMatrix.valueOf(Pd_array);
-				
-				
+
 				Complex sigma_mat_array[][] = new Complex[24][24];
 				for (int i = 0; i < 24; i++) {
 
 					for (int j = 0; j < 24; j++) {
-						if(i==j){
+						if (i == j) {
 							sigma_mat_array[i][i] = Complex.valueOf(sigma * sigma, 0.0);
-						
-						}else{
+
+						} else {
 							sigma_mat_array[i][j] = Complex.valueOf(0.0, 0.0);
-							
+
 						}
 					}
 				}
-				ComplexMatrix sigma_mat=ComplexMatrix.valueOf(sigma_mat_array);
+				ComplexMatrix sigma_mat = ComplexMatrix.valueOf(sigma_mat_array);
 				//////////////////////////////////////////////////////////////
 				Complex C_her_array[][] = new Complex[24][24];
 				ComplexMatrix C;
 				ComplexMatrix C_her;
-				C=Pd.times(H).times(Hhat).plus(sigma_mat).inverse().times(Pd).times(Hhat);
-//				System.out.println(C);
+				C = Pd.times(H).times(Hhat).plus(sigma_mat).inverse().times(Pd).times(Hhat);
+				// System.out.println(C);
 				for (int j = 0; j < 24; j++) {
 					for (int k = 0; k < 24; k++) {
-						C_her_array[j][k]= Complex.valueOf(C.get(j, k).getReal(), (-1)*C.get(j, k).getImaginary());  //(i, j)=Complex ;// H.get(i, j).getImaginary();
+						C_her_array[j][k] = Complex.valueOf(C.get(j, k).getReal(), (-1) * C.get(j, k).getImaginary()); // (i,
+																														// j)=Complex
+																														// ;//
+																														// H.get(i,
+																														// j).getImaginary();
 					}
 				}
-				C_her=ComplexMatrix.valueOf(C_her_array);
-				C_her=C_her.transpose();
-				
-//				Complex C_her_array1[][] = new Complex[24][24];
-//				ComplexMatrix C1;
-//				ComplexMatrix C_her1;
-//				C1=Pd.times(H).times(Hhat).inverse().times(Pd).times(Hhat);
-////				System.out.println(C1);
-//				for (int j = 0; j < 24; j++) {
-//					for (int k = 0; k < 24; k++) {
-//						C_her_array1[j][k]= Complex.valueOf(C1.get(j, k).getReal(), (-1)*C1.get(j, k).getImaginary());  //(i, j)=Complex ;// H.get(i, j).getImaginary();
-////						System.out.println(C_her_array1[j][k]);
-//					}
-//				}
-//				C_her1=ComplexMatrix.valueOf(C_her_array1);
-//				C_her1=C_her1.transpose();
-//				System.out.println(C_her1);
-				
-				
-				save(H,"params/channel matrices/"+channel_type+"-"+corr_type+"-H");
-				save(H_out,"params/channel matrices/"+channel_type+"-"+corr_type+"-Hout");
-				save(Hinv,"params/channel matrices/"+channel_type+"-"+corr_type+"-Hinv");
-				save(C_her,"params/channel matrices/"+channel_type+"-"+corr_type+"-HLMMSE");
-//				save(C_her1,"params/channel matrices/"+channel_type+"-"+corr_type+"-HLMMSEzero");
+				C_her = ComplexMatrix.valueOf(C_her_array);
+				C_her = C_her.transpose();
+
+				// Complex C_her_array1[][] = new Complex[24][24];
+				// ComplexMatrix C1;
+				// ComplexMatrix C_her1;
+				// C1=Pd.times(H).times(Hhat).inverse().times(Pd).times(Hhat);
+				//// System.out.println(C1);
+				// for (int j = 0; j < 24; j++) {
+				// for (int k = 0; k < 24; k++) {
+				// C_her_array1[j][k]= Complex.valueOf(C1.get(j, k).getReal(),
+				// (-1)*C1.get(j, k).getImaginary()); //(i, j)=Complex ;//
+				// H.get(i, j).getImaginary();
+				//// System.out.println(C_her_array1[j][k]);
+				// }
+				// }
+				// C_her1=ComplexMatrix.valueOf(C_her_array1);
+				// C_her1=C_her1.transpose();
+				// System.out.println(C_her1);
+
+				save(H, "params/channel matrices/" + channel_type + "-" + corr_type + "-H");
+				save(H_out, "params/channel matrices/" + channel_type + "-" + corr_type + "-Hout");
+				save(Hinv, "params/channel matrices/" + channel_type + "-" + corr_type + "-Hinv");
+				save(C_her, "params/channel matrices/" + channel_type + "-" + corr_type + "-HLMMSE");
+				// save(C_her1,"params/channel
+				// matrices/"+channel_type+"-"+corr_type+"-HLMMSEzero");
 			}
 		}
-			
-			
-			
-			
+
 	}
-	
-	private static void save(ComplexMatrix A,String s){
-		double[][] rel=new double[ A.getNumberOfRows()][A.getNumberOfColumns()];
-		double[][] img=new double[ A.getNumberOfRows()][A.getNumberOfColumns()]; 
+
+	private static void save(ComplexMatrix A, String s) {
+		double[][] rel = new double[A.getNumberOfRows()][A.getNumberOfColumns()];
+		double[][] img = new double[A.getNumberOfRows()][A.getNumberOfColumns()];
 		for (int i = 0; i < A.getNumberOfRows(); i++) {
 			for (int j = 0; j < A.getNumberOfColumns(); j++) {
-				rel[i][j]=A.get(i, j).getReal();
-				img[i][j]=A.get(i, j).getImaginary();
+				rel[i][j] = A.get(i, j).getReal();
+				img[i][j] = A.get(i, j).getImaginary();
 			}
 		}
-		
-		try
-	      {
-		     FileOutputStream fileOut1 = new FileOutputStream(s+"real.ser");
-		     FileOutputStream fileOut2 = new FileOutputStream(s+"img.ser");
-		     ObjectOutputStream out1 = new ObjectOutputStream(fileOut1);
-		     out1.writeObject(rel);
-		     ObjectOutputStream out2 = new ObjectOutputStream(fileOut2);
-		     out2.writeObject(img);
-		     out1.close();
-		     out2.close();
-		     fileOut1.close();
-		     fileOut2.close();
-		  }catch(IOException i){
-		      i.printStackTrace();
-		  }
 
-		
+		try {
+			FileOutputStream fileOut1 = new FileOutputStream(s + "real.ser");
+			FileOutputStream fileOut2 = new FileOutputStream(s + "img.ser");
+			ObjectOutputStream out1 = new ObjectOutputStream(fileOut1);
+			out1.writeObject(rel);
+			ObjectOutputStream out2 = new ObjectOutputStream(fileOut2);
+			out2.writeObject(img);
+			out1.close();
+			out2.close();
+			fileOut1.close();
+			fileOut2.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
+
 	}
-	
+
 	private double[][] fft(double[][] tx) {
 		double in[] = new double[24];
 
@@ -473,7 +462,7 @@ public class Channel_Generator {
 		for (int i = 0; i < rx[0].length / 2; ++i) {
 			in1[2 * i] = rx[0][i];
 			in1[2 * i + 1] = rx[1][i];
-			
+
 			in2[2 * i] = rx[0][i + 12];
 			in2[2 * i + 1] = rx[1][i + 12];
 		}
@@ -494,7 +483,6 @@ public class Channel_Generator {
 		return rx;
 	}
 
-	
 }
 
 class DFTARRAY {
@@ -506,8 +494,7 @@ class DFTARRAY {
 		Complex val = Complex.valueOf(0, 0);
 		for (int i = 0; i < DF.length / 2; i++) {
 			for (int j = 0; j < DF.length / 2; j++) {
-				val = Complex.valueOf(0, -1 * (2 * Math.PI * (i) * (j) / 8))
-						.exp();
+				val = Complex.valueOf(0, -1 * (2 * Math.PI * (i) * (j) / 8)).exp();
 				if (Math.abs(val.getReal()) < Math.pow(10, -10)) {
 					val = Complex.valueOf(0, val.getImaginary());
 				}
@@ -528,7 +515,7 @@ class DFTARRAY {
 	public Complex[][] getDFT() {
 		return DF;
 	}
-	
+
 	public void printDFT() {
 		System.out.println("DFT Matrix :");
 		for (int i = 0; i < DF.length; i++) {
@@ -539,6 +526,5 @@ class DFTARRAY {
 		}
 
 	}
-	
-}
 
+}

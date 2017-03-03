@@ -2,25 +2,23 @@ package receiver;
 
 import java.util.Random;
 
-import weka.core.matrix.*;
-
 import org.jscience.mathematics.number.Complex;
 import org.jscience.mathematics.vector.ComplexMatrix;
 import org.jtransforms.fft.DoubleFFT_1D;
 
+import weka.core.matrix.Matrix;
 
 public class Channel {
 
-
 	public Channel() {
-		
+
 	}
 
 	public static ComplexMatrix getH() {
-		String channel_type="EPA 5Hz";
-		String corr_type="Low";
-		double fcarry=2;
-		double sigma=0;
+		String channel_type = "EPA 5Hz";
+		String corr_type = "Low";
+		double fcarry = 2;
+		double sigma = 0;
 		ComplexMatrix H_out;
 		ComplexMatrix H;
 		Complex H_array[][];
@@ -28,305 +26,288 @@ public class Channel {
 		double no_taps = 0;
 		int path_delays[] = { 0, 30, 70, 90, 110, 190, 410, 0, 0 };
 		double path_gains[] = { 0, -1, -2, -3, -8, -17.2, -20.8, 0, 0 };
-		
-			double tx_corr_coeff = 0.0;
-			double rx_corr_coeff = 0.0;
 
-			switch (corr_type) {
-			case "Low":
-				tx_corr_coeff = 0;
-				rx_corr_coeff = 0;
-				break;
+		double tx_corr_coeff = 0.0;
+		double rx_corr_coeff = 0.0;
 
-			case "Medium":
-				tx_corr_coeff = 0.3;
-				rx_corr_coeff = 0.9;
-				break;
+		switch (corr_type) {
+		case "Low":
+			tx_corr_coeff = 0;
+			rx_corr_coeff = 0;
+			break;
 
-			default:
-				tx_corr_coeff = 0.9;
-				rx_corr_coeff = 0.9;
+		case "Medium":
+			tx_corr_coeff = 0.3;
+			rx_corr_coeff = 0.9;
+			break;
 
-			}
-			double dopp_freq = 6;
-			
-			
-			/*
-			 * int[] path_delays; double[] path_gains;
-			 */
-			if (channel_type.equals("EPA 5Hz")) {
+		default:
+			tx_corr_coeff = 0.9;
+			rx_corr_coeff = 0.9;
 
-				dopp_freq = dopp_freq - 1;// 5
-				no_taps = 7;
-			} else if (channel_type.equals("EVA 5Hz")) {
-				path_delays[2] = 150;
-				path_delays[3] = 310;
-				path_delays[4] = 370;
-				path_delays[5] = 710;
-				path_delays[6] = 1090;
-				path_delays[7] = 1730;
-				path_delays[8] = 2510;
+		}
+		double dopp_freq = 6;
 
-				path_gains[1] = -1.5;
-				path_gains[2] = -1.4;
-				path_gains[3] = -3.6;
-				path_gains[4] = -0.6;
-				path_gains[5] = -9.1;
-				path_gains[6] = -7;
-				path_gains[7] = -12;
-				path_gains[8] = -16.9;
-				dopp_freq = 5;
-				no_taps = 9;
-			} else if (channel_type.equals("EVA 70Hz")) {
-				path_delays[2] = 150;
-				path_delays[3] = 310;
-				path_delays[4] = 370;
-				path_delays[5] = 710;
-				path_delays[6] = 1090;
-				path_delays[7] = 1730;
-				path_delays[8] = 2510;
+		/*
+		 * int[] path_delays; double[] path_gains;
+		 */
+		if (channel_type.equals("EPA 5Hz")) {
 
-				path_gains[1] = -1.5;
-				path_gains[2] = -1.4;
-				path_gains[3] = -3.6;
-				path_gains[4] = -0.6;
-				path_gains[5] = -9.1;
-				path_gains[6] = -7;
-				path_gains[7] = -12;
-				path_gains[8] = -16.9;
+			dopp_freq = dopp_freq - 1;// 5
+			no_taps = 7;
+		} else if (channel_type.equals("EVA 5Hz")) {
+			path_delays[2] = 150;
+			path_delays[3] = 310;
+			path_delays[4] = 370;
+			path_delays[5] = 710;
+			path_delays[6] = 1090;
+			path_delays[7] = 1730;
+			path_delays[8] = 2510;
 
-				dopp_freq = 70;
-				no_taps = 9;
-			} else if (channel_type.equals("ETU 70Hz")) {
-				path_delays[1] = 50;
-				path_delays[2] = 120;
-				path_delays[3] = 200;
-				path_delays[4] = 230;
-				path_delays[5] = 500;
-				path_delays[6] = 1600;
-				path_delays[7] = 2300;
-				path_delays[8] = 5000;
+			path_gains[1] = -1.5;
+			path_gains[2] = -1.4;
+			path_gains[3] = -3.6;
+			path_gains[4] = -0.6;
+			path_gains[5] = -9.1;
+			path_gains[6] = -7;
+			path_gains[7] = -12;
+			path_gains[8] = -16.9;
+			dopp_freq = 5;
+			no_taps = 9;
+		} else if (channel_type.equals("EVA 70Hz")) {
+			path_delays[2] = 150;
+			path_delays[3] = 310;
+			path_delays[4] = 370;
+			path_delays[5] = 710;
+			path_delays[6] = 1090;
+			path_delays[7] = 1730;
+			path_delays[8] = 2510;
 
-				path_gains[0] = -1;
-				path_gains[1] = -1;
-				path_gains[2] = -1;
-				path_gains[3] = 0;
-				path_gains[4] = 0;
-				path_gains[5] = 0;
-				path_gains[6] = -3;
-				path_gains[7] = -5;
-				path_gains[8] = -7;
-				dopp_freq = 70;
-				no_taps = 9;
-			} else if(channel_type.equals("test 0Hz")){// ETU 300Hz
-				path_delays[1] = 0;
-				path_delays[2] = 0;
-				path_delays[3] = 0;
-				path_delays[4] = 0;
-				path_delays[5] = 0;
-				path_delays[6] = 0;
-				path_delays[7] = 0;
-				path_delays[8] = 0;
+			path_gains[1] = -1.5;
+			path_gains[2] = -1.4;
+			path_gains[3] = -3.6;
+			path_gains[4] = -0.6;
+			path_gains[5] = -9.1;
+			path_gains[6] = -7;
+			path_gains[7] = -12;
+			path_gains[8] = -16.9;
 
-				path_gains[0] = 1;
-				path_gains[1] = 0;
-				path_gains[2] = 0;
-				path_gains[3] = 0;
-				path_gains[4] = 0;
-				path_gains[5] = 0;
-				path_gains[6] = 0;
-				path_gains[7] = 0;
-				path_gains[8] = 0;
-				dopp_freq = 0;
-				no_taps = 1;
-			}else{
-				path_delays[1] = 50;
-				path_delays[2] = 120;
-				path_delays[3] = 200;
-				path_delays[4] = 230;
-				path_delays[5] = 500;
-				path_delays[6] = 1600;
-				path_delays[7] = 2300;
-				path_delays[8] = 5000;
+			dopp_freq = 70;
+			no_taps = 9;
+		} else if (channel_type.equals("ETU 70Hz")) {
+			path_delays[1] = 50;
+			path_delays[2] = 120;
+			path_delays[3] = 200;
+			path_delays[4] = 230;
+			path_delays[5] = 500;
+			path_delays[6] = 1600;
+			path_delays[7] = 2300;
+			path_delays[8] = 5000;
 
-				path_gains[0] = -1;
-				path_gains[1] = -1;
-				path_gains[2] = -1;
-				path_gains[3] = 0;
-				path_gains[4] = 0;
-				path_gains[5] = 0;
-				path_gains[6] = -3;
-				path_gains[7] = -5;
-				path_gains[8] = -7;
-				dopp_freq = 300;
-				no_taps = 9;
-			}
-			// ////////////////////////////////////////
+			path_gains[0] = -1;
+			path_gains[1] = -1;
+			path_gains[2] = -1;
+			path_gains[3] = 0;
+			path_gains[4] = 0;
+			path_gains[5] = 0;
+			path_gains[6] = -3;
+			path_gains[7] = -5;
+			path_gains[8] = -7;
+			dopp_freq = 70;
+			no_taps = 9;
+		} else if (channel_type.equals("test 0Hz")) {// ETU 300Hz
+			path_delays[1] = 0;
+			path_delays[2] = 0;
+			path_delays[3] = 0;
+			path_delays[4] = 0;
+			path_delays[5] = 0;
+			path_delays[6] = 0;
+			path_delays[7] = 0;
+			path_delays[8] = 0;
 
-			double[][] valstx = { { 1., tx_corr_coeff }, { tx_corr_coeff, 1. } };
-			double[][] valsrx = { { 1., rx_corr_coeff }, { rx_corr_coeff, 1. } };
-			/*
-			 * Matrix tx_corr_matrix = new Matrix(valstx); Matrix rx_corr_matrix =
-			 * new Matrix(valsrx);
-			 */
-			double[][] corr_matrix_val = {
-					{ valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
-							valstx[0][1] * valsrx[0][0],
-							valstx[0][1] * valsrx[0][1] },
+			path_gains[0] = 1;
+			path_gains[1] = 0;
+			path_gains[2] = 0;
+			path_gains[3] = 0;
+			path_gains[4] = 0;
+			path_gains[5] = 0;
+			path_gains[6] = 0;
+			path_gains[7] = 0;
+			path_gains[8] = 0;
+			dopp_freq = 0;
+			no_taps = 1;
+		} else {
+			path_delays[1] = 50;
+			path_delays[2] = 120;
+			path_delays[3] = 200;
+			path_delays[4] = 230;
+			path_delays[5] = 500;
+			path_delays[6] = 1600;
+			path_delays[7] = 2300;
+			path_delays[8] = 5000;
 
-					{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1],
-							valstx[0][1] * valsrx[1][0],
-							valstx[0][1] * valsrx[1][1] },
+			path_gains[0] = -1;
+			path_gains[1] = -1;
+			path_gains[2] = -1;
+			path_gains[3] = 0;
+			path_gains[4] = 0;
+			path_gains[5] = 0;
+			path_gains[6] = -3;
+			path_gains[7] = -5;
+			path_gains[8] = -7;
+			dopp_freq = 300;
+			no_taps = 9;
+		}
+		// ////////////////////////////////////////
 
-					{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1],
-							valstx[1][1] * valsrx[0][0],
-							valstx[1][1] * valsrx[0][1] },
+		double[][] valstx = { { 1., tx_corr_coeff }, { tx_corr_coeff, 1. } };
+		double[][] valsrx = { { 1., rx_corr_coeff }, { rx_corr_coeff, 1. } };
+		/*
+		 * Matrix tx_corr_matrix = new Matrix(valstx); Matrix rx_corr_matrix =
+		 * new Matrix(valsrx);
+		 */
+		double[][] corr_matrix_val = { { valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
+				valstx[0][1] * valsrx[0][0], valstx[0][1] * valsrx[0][1] },
 
-					{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1],
-							valstx[1][1] * valsrx[1][0],
-							valstx[1][1] * valsrx[1][1] } };
+				{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1], valstx[0][1] * valsrx[1][0],
+						valstx[0][1] * valsrx[1][1] },
 
-			Matrix corr_matrix = new Matrix(corr_matrix_val);
+				{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1], valstx[1][1] * valsrx[0][0],
+						valstx[1][1] * valsrx[0][1] },
 
-			sqrt_corr_matrix = corr_matrix.sqrt();
-			
-			int l=12;
-			double[] f = new double[l * 2];
-			for (int k = 0; k < l; ++k) {
+				{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1], valstx[1][1] * valsrx[1][0],
+						valstx[1][1] * valsrx[1][1] } };
 
-				f[k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
-				f[l + k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
+		Matrix corr_matrix = new Matrix(corr_matrix_val);
 
-			}
-			
-			H_array= new Complex[2 * l][2 * l];
-			for (int i = 0; i < 2 * l; i++) {
-				for (int j = 0; j < 2 * l; j++) {
-					H_array[i][j] = Complex.valueOf(0.0, 0.0);
-				}
+		sqrt_corr_matrix = corr_matrix.sqrt();
 
+		int l = 12;
+		double[] f = new double[l * 2];
+		for (int k = 0; k < l; ++k) {
+
+			f[k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
+			f[l + k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
+
+		}
+
+		H_array = new Complex[2 * l][2 * l];
+		for (int i = 0; i < 2 * l; i++) {
+			for (int j = 0; j < 2 * l; j++) {
+				H_array[i][j] = Complex.valueOf(0.0, 0.0);
 			}
 
-			Complex tr_1_coeff = Complex.valueOf(0.0, 0.0);
-			Complex tr_2_coeff = Complex.valueOf(0.0, 0.0);
-			Complex tr_1_calc = Complex.valueOf(0.0, 0.0);
-			Complex tr_2_calc = Complex.valueOf(0.0, 0.0);
-			Complex A_array[] = new Complex[4];
-			Random ran = new Random();
+		}
+
+		Complex tr_1_coeff = Complex.valueOf(0.0, 0.0);
+		Complex tr_2_coeff = Complex.valueOf(0.0, 0.0);
+		Complex tr_1_calc = Complex.valueOf(0.0, 0.0);
+		Complex tr_2_calc = Complex.valueOf(0.0, 0.0);
+		Complex A_array[] = new Complex[4];
+		Random ran = new Random();
+		for (int i = 0; i < 4; i++) {
+			A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
+
+		}
+
+		Complex B_array[] = A_array;
+
+		for (int i = 0; i < 4; ++i) {
+			B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i))).plus(
+					(A_array[1].times(sqrt_corr_matrix.get(1, i))).plus((A_array[2].times(sqrt_corr_matrix.get(2, i)))
+							.plus((A_array[3].times(sqrt_corr_matrix.get(3, i))))));
+		}
+
+		for (int k = 0; k < l; ++k) {
+
+			// generate random numbers for A
 			for (int i = 0; i < 4; i++) {
 				A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
 
 			}
-			
-			Complex B_array[] = A_array;
 
 			for (int i = 0; i < 4; ++i) {
 				B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
-						.plus((A_array[1].times(sqrt_corr_matrix.get(1, i)))
-								.plus((A_array[2].times(sqrt_corr_matrix.get(2, i)))
-										.plus((A_array[3].times(sqrt_corr_matrix
-												.get(3, i))))));
-			}
-			
-			for (int k = 0; k < l; ++k) {
-				
-				// generate random numbers for A
-				for (int i = 0; i < 4; i++) {
-					A_array[i] = Complex.valueOf(ran.nextGaussian(),
-							ran.nextGaussian());
-
-				}
-				
-				for (int i = 0; i < 4; ++i) {
-					B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
-							.plus(A_array[1].times(sqrt_corr_matrix.get(1, i)))
-							.plus(A_array[2].times(sqrt_corr_matrix.get(2, i)))
-							.plus(A_array[3].times(sqrt_corr_matrix.get(3, i)));
-					// B_array[i]=A_array[0].times(sqrt_corr_matrix.get(0,
-					// i)).plus(that)
-
-				}
-				// B = ComplexMatrix.valueOf(B_array);
-				/*
-				 * System.out.println("B_array : " + B_array[0].toString() + " , " +
-				 * B_array[1].toString());
-				 */
-				tr_1_coeff = Complex.valueOf(1.0, 0.0);
-				tr_2_coeff = Complex.valueOf(1.0, 0.0);
-				// cout<<"EXP : "<<tr_1_coeff(0, 0)<<" : "<<exp(tr_1_coeff(0,
-				// 0))<<endl;
-				// for m =1:no_taps
-				for (int m = 0; m < no_taps; ++m) {
-					tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k]
-							* path_delays[m]);
-					tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8]
-							* path_delays[m]);
-
-					tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-							.plus(tr_1_calc.exp()).plus(tr_1_coeff);
-					tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-							.plus(tr_2_calc.exp()).plus(tr_2_coeff);
-				}
-
-				// 2 by 2 MIMO --> 4Paths
-				// System.out.println("tr1 : " + tr_1_coeff.toString());
-
-				H_array[k][k] = B_array[0].times(tr_1_coeff);
-				H_array[k][k + l] = B_array[1].times(tr_2_coeff);
-				H_array[k + l][k] = B_array[2].times(tr_1_coeff);
-				H_array[k + l][k + l] = B_array[3].times(tr_2_coeff);
+						.plus(A_array[1].times(sqrt_corr_matrix.get(1, i)))
+						.plus(A_array[2].times(sqrt_corr_matrix.get(2, i)))
+						.plus(A_array[3].times(sqrt_corr_matrix.get(3, i)));
+				// B_array[i]=A_array[0].times(sqrt_corr_matrix.get(0,
+				// i)).plus(that)
 
 			}
+			// B = ComplexMatrix.valueOf(B_array);
+			/*
+			 * System.out.println("B_array : " + B_array[0].toString() + " , " +
+			 * B_array[1].toString());
+			 */
+			tr_1_coeff = Complex.valueOf(1.0, 0.0);
+			tr_2_coeff = Complex.valueOf(1.0, 0.0);
+			// cout<<"EXP : "<<tr_1_coeff(0, 0)<<" : "<<exp(tr_1_coeff(0,
+			// 0))<<endl;
+			// for m =1:no_taps
+			for (int m = 0; m < no_taps; ++m) {
+				tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k] * path_delays[m]);
+				tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8] * path_delays[m]);
 
-
-			Complex noise_array[][] = new Complex[1][24];
-			for (int j = 0; j < noise_array.length; j++) {
-				noise_array[0][j] = Complex.valueOf(ran.nextGaussian(),
-						ran.nextGaussian());// make it random
-			}
-			
-			H = ComplexMatrix.valueOf(H_array);
-//			System.out.println(H);
-			
-
-			Complex H1_array[][] = new Complex[16][16];
-
-			for (int y = 0; y < 8; ++y) {
-				for (int z = 0; z < 8; ++z) {
-					H1_array[y][z] = H.get(y + 2, z + 2);
-				}
+				tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_1_calc.exp()).plus(tr_1_coeff);
+				tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_2_calc.exp()).plus(tr_2_coeff);
 			}
 
-			for (int y = 0; y < 8; ++y) {
-				for (int z = 8; z < 16; ++z) {
-					H1_array[y][z] = H.get(y + 2, z + 6);
-				}
-			}
+			// 2 by 2 MIMO --> 4Paths
+			// System.out.println("tr1 : " + tr_1_coeff.toString());
 
-			for (int y = 8; y < 16; ++y) {
-				for (int z = 0; z < 8; ++z) {
-					H1_array[y][z] = H.get(y + 6, z + 2);
-				}
-			}
+			H_array[k][k] = B_array[0].times(tr_1_coeff);
+			H_array[k][k + l] = B_array[1].times(tr_2_coeff);
+			H_array[k + l][k] = B_array[2].times(tr_1_coeff);
+			H_array[k + l][k + l] = B_array[3].times(tr_2_coeff);
 
-			for (int y = 8; y < 16; ++y) {
-				for (int z = 8; z < 16; ++z) {
-					H1_array[y][z] = H.get(y + 6, z + 6);
-				}
-			}
+		}
 
-			ComplexMatrix H1_mat = ComplexMatrix.valueOf(H1_array);
-			DFTARRAY dft = new DFTARRAY();
-			Complex[][] dftArray = dft.getDFT();
-			ComplexMatrix DF = ComplexMatrix.valueOf(dftArray);
-			H_out = H1_mat.times(DF);
-	    	    
-		
-		
+		Complex noise_array[][] = new Complex[1][24];
+		for (int j = 0; j < noise_array.length; j++) {
+			noise_array[0][j] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());// make
+																						// it
+																						// random
+		}
+
+		H = ComplexMatrix.valueOf(H_array);
+		// System.out.println(H);
+
+		Complex H1_array[][] = new Complex[16][16];
+
+		for (int y = 0; y < 8; ++y) {
+			for (int z = 0; z < 8; ++z) {
+				H1_array[y][z] = H.get(y + 2, z + 2);
+			}
+		}
+
+		for (int y = 0; y < 8; ++y) {
+			for (int z = 8; z < 16; ++z) {
+				H1_array[y][z] = H.get(y + 2, z + 6);
+			}
+		}
+
+		for (int y = 8; y < 16; ++y) {
+			for (int z = 0; z < 8; ++z) {
+				H1_array[y][z] = H.get(y + 6, z + 2);
+			}
+		}
+
+		for (int y = 8; y < 16; ++y) {
+			for (int z = 8; z < 16; ++z) {
+				H1_array[y][z] = H.get(y + 6, z + 6);
+			}
+		}
+
+		ComplexMatrix H1_mat = ComplexMatrix.valueOf(H1_array);
+		DFTARRAY dft = new DFTARRAY();
+		Complex[][] dftArray = dft.getDFT();
+		ComplexMatrix DF = ComplexMatrix.valueOf(dftArray);
+		H_out = H1_mat.times(DF);
+
 		return H_out;
 	}
 
-	
 	private double[][] fft(double[][] tx) {
 		double in[] = new double[24];
 
@@ -355,7 +336,7 @@ public class Channel {
 		for (int i = 0; i < rx[0].length / 2; ++i) {
 			in1[2 * i] = rx[0][i];
 			in1[2 * i + 1] = rx[1][i];
-			
+
 			in2[2 * i] = rx[0][i + 12];
 			in2[2 * i + 1] = rx[1][i + 12];
 		}
@@ -386,8 +367,7 @@ class DFTARRAY {
 		Complex val = Complex.valueOf(0, 0);
 		for (int i = 0; i < DF.length / 2; i++) {
 			for (int j = 0; j < DF.length / 2; j++) {
-				val = Complex.valueOf(0, -1 * (2 * Math.PI * (i) * (j) / 8))
-						.exp();
+				val = Complex.valueOf(0, -1 * (2 * Math.PI * (i) * (j) / 8)).exp();
 				if (Math.abs(val.getReal()) < Math.pow(10, -10)) {
 					val = Complex.valueOf(0, val.getImaginary());
 				}
@@ -420,4 +400,3 @@ class DFTARRAY {
 
 	}
 }
-

@@ -1,29 +1,27 @@
 package channel;
 
-
 import java.util.Random;
-
-import weka.core.matrix.*;
 
 import org.jscience.mathematics.number.Complex;
 import org.jscience.mathematics.vector.ComplexMatrix;
 import org.jtransforms.fft.DoubleFFT_1D;
 
-public class newChannel extends
-edu.mit.streamjit.api.Filter<Float, Float>{
-	
-	static String channel_type="EPA 5Hz";
-	static String corr_type="Low";
-	static double fcarry=2;
-	static double sigma=0;
+import weka.core.matrix.Matrix;
+
+public class newChannel extends edu.mit.streamjit.api.Filter<Float, Float> {
+
+	static String channel_type = "EPA 5Hz";
+	static String corr_type = "Low";
+	static double fcarry = 2;
+	static double sigma = 0;
 	static ComplexMatrix H_out;
-	static int length=16;
+	static int length = 16;
 	static Matrix sqrt_corr_matrix;
 	double no_taps = 0;
 	static int path_delays[] = { 0, 30, 70, 90, 110, 190, 410, 0, 0 };
 	static double path_gains[] = { 0, -1, -2, -3, -8, -17.2, -20.8, 0, 0 };
-	
-	{   
+
+	{
 		double tx_corr_coeff = 0.0;
 		double rx_corr_coeff = 0.0;
 
@@ -44,8 +42,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 
 		}
 		double dopp_freq = 6;
-		
-		
+
 		/*
 		 * int[] path_delays; double[] path_gains;
 		 */
@@ -113,7 +110,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			path_gains[8] = -7;
 			dopp_freq = 70;
 			no_taps = 9;
-		} else if(channel_type.equals("ETU 300Hz")){// ETU 300Hz	
+		} else if (channel_type.equals("ETU 300Hz")) {// ETU 300Hz
 			path_delays[1] = 50;
 			path_delays[2] = 120;
 			path_delays[3] = 200;
@@ -134,7 +131,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			path_gains[8] = -7;
 			dopp_freq = 300;
 			no_taps = 9;
-		}else{							
+		} else {
 			path_delays[1] = 0;
 			path_delays[2] = 0;
 			path_delays[3] = 0;
@@ -164,53 +161,47 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 		 * Matrix tx_corr_matrix = new Matrix(valstx); Matrix rx_corr_matrix =
 		 * new Matrix(valsrx);
 		 */
-		double[][] corr_matrix_val = {
-				{ valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
-						valstx[0][1] * valsrx[0][0],
-						valstx[0][1] * valsrx[0][1] },
+		double[][] corr_matrix_val = { { valstx[0][0] * valsrx[0][0], valstx[0][0] * valsrx[0][1],
+				valstx[0][1] * valsrx[0][0], valstx[0][1] * valsrx[0][1] },
 
-				{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1],
-						valstx[0][1] * valsrx[1][0],
+				{ valstx[0][0] * valsrx[1][0], valstx[0][0] * valsrx[1][1], valstx[0][1] * valsrx[1][0],
 						valstx[0][1] * valsrx[1][1] },
 
-				{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1],
-						valstx[1][1] * valsrx[0][0],
+				{ valstx[1][0] * valsrx[0][0], valstx[1][0] * valsrx[0][1], valstx[1][1] * valsrx[0][0],
 						valstx[1][1] * valsrx[0][1] },
 
-				{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1],
-						valstx[1][1] * valsrx[1][0],
+				{ valstx[1][0] * valsrx[1][0], valstx[1][0] * valsrx[1][1], valstx[1][1] * valsrx[1][0],
 						valstx[1][1] * valsrx[1][1] } };
 
 		Matrix corr_matrix = new Matrix(corr_matrix_val);
 
-		sqrt_corr_matrix = corr_matrix.sqrt();  
-    	    
+		sqrt_corr_matrix = corr_matrix.sqrt();
+
 	}
-    
+
 	public newChannel(int length) {
-		super(length*2,length*2);
-		
+		super(length * 2, length * 2);
+
 	}
 
 	@Override
 	public void work() {
-					
-		double[][] tx1=new double[2][12];
-		double[][] tx2=new double[2][12];
-		
+
+		double[][] tx1 = new double[2][12];
+		double[][] tx2 = new double[2][12];
+
 		for (int j = 0; j < 12; j++) {
-			tx1[0][j]=pop();
-			tx1[1][j]=pop();
+			tx1[0][j] = pop();
+			tx1[1][j] = pop();
 		}
-		
+
 		for (int j = 0; j < 12; j++) {
-			tx2[0][j]=pop();
-			tx2[1][j]=pop();
+			tx2[0][j] = pop();
+			tx2[1][j] = pop();
 		}
-		
-		
+
 		int l = tx1[0].length;// number of sub carriers 12
-		
+
 		double[] f = new double[l * 2];
 		for (int k = 0; k < l; ++k) {
 
@@ -218,7 +209,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			f[l + k] = fcarry - 59 * 15 * 0.000001 + 15 * 0.000001 * k;
 
 		}
-		
+
 		Complex H_array[][] = new Complex[2 * l][2 * l];
 		for (int i = 0; i < 2 * l; i++) {
 			for (int j = 0; j < 2 * l; j++) {
@@ -237,27 +228,23 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
 
 		}
-		
+
 		Complex B_array[] = A_array;
 
 		for (int i = 0; i < 4; ++i) {
-			B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
-					.plus((A_array[1].times(sqrt_corr_matrix.get(1, i)))
-							.plus((A_array[2].times(sqrt_corr_matrix.get(2, i)))
-									.plus((A_array[3].times(sqrt_corr_matrix
-											.get(3, i))))));
+			B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i))).plus(
+					(A_array[1].times(sqrt_corr_matrix.get(1, i))).plus((A_array[2].times(sqrt_corr_matrix.get(2, i)))
+							.plus((A_array[3].times(sqrt_corr_matrix.get(3, i))))));
 		}
-		
+
 		for (int k = 0; k < l; ++k) {
 
-			
 			// generate random numbers for A
 			for (int i = 0; i < 4; i++) {
-				A_array[i] = Complex.valueOf(ran.nextGaussian(),
-						ran.nextGaussian());
+				A_array[i] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());
 
 			}
-			
+
 			for (int i = 0; i < 4; ++i) {
 				B_array[i] = (A_array[0].times(sqrt_corr_matrix.get(0, i)))
 						.plus(A_array[1].times(sqrt_corr_matrix.get(1, i)))
@@ -278,15 +265,11 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 			// 0))<<endl;
 			// for m =1:no_taps
 			for (int m = 0; m < no_taps; ++m) {
-				tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k]
-						* path_delays[m]);
-				tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8]
-						* path_delays[m]);
+				tr_1_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k] * path_delays[m]);
+				tr_2_calc = Complex.valueOf(0.0, 2.0 * Math.PI * f[k + 8] * path_delays[m]);
 
-				tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-						.plus(tr_1_calc.exp()).plus(tr_1_coeff);
-				tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt()
-						.plus(tr_2_calc.exp()).plus(tr_2_coeff);
+				tr_1_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_1_calc.exp()).plus(tr_1_coeff);
+				tr_2_coeff = Complex.valueOf(10.0, 0).pow(path_gains[m]).sqrt().plus(tr_2_calc.exp()).plus(tr_2_coeff);
 			}
 
 			// 2 by 2 MIMO --> 4Paths
@@ -299,14 +282,13 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 
 		}
 
-
 		Complex noise_array[][] = new Complex[1][24];
 		for (int j = 0; j < noise_array.length; j++) {
-			noise_array[0][j] = Complex.valueOf(ran.nextGaussian(),
-					ran.nextGaussian());// make it random
+			noise_array[0][j] = Complex.valueOf(ran.nextGaussian(), ran.nextGaussian());// make
+																						// it
+																						// random
 		}
 
-		
 		Complex Tx_array[][] = new Complex[24][1];
 
 		tx1 = fft(tx1);
@@ -320,12 +302,12 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 		}
 
 		ComplexMatrix H = ComplexMatrix.valueOf(H_array);
-//		System.out.println(H);
+		// System.out.println(H);
 		ComplexMatrix Tx = ComplexMatrix.valueOf(Tx_array);
 		// ComplexMatrix noise = ComplexMatrix.valueOf(noise_array);
 		ComplexMatrix R = H.times(Tx); // yet to add noise for the data
 
-	//	System.out.println(R);
+		// System.out.println(R);
 
 		double RX[][] = new double[2][24];
 
@@ -367,15 +349,14 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 		ComplexMatrix DF = ComplexMatrix.valueOf(dftArray);
 		H_out = H1_mat.times(DF);
 		// System.out.println(H0);
-		
+
 		for (int i = 0; i < RX[0].length; i++) {
-			push((float)RX[0][i]);
-			push((float)RX[1][i]);
+			push((float) RX[0][i]);
+			push((float) RX[1][i]);
 		}
-		
-		
+
 	}
-	
+
 	public ComplexMatrix getHout() {
 		return H_out;
 	}
@@ -408,7 +389,7 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 		for (int i = 0; i < rx[0].length / 2; ++i) {
 			in1[2 * i] = rx[0][i];
 			in1[2 * i + 1] = rx[1][i];
-			
+
 			in2[2 * i] = rx[0][i + 12];
 			in2[2 * i + 1] = rx[1][i + 12];
 		}
@@ -429,4 +410,3 @@ edu.mit.streamjit.api.Filter<Float, Float>{
 		return rx;
 	}
 }
-

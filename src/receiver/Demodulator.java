@@ -7,13 +7,17 @@ public class Demodulator extends edu.mit.streamjit.api.Filter<Float, Byte> {
 
 	@Override
 	public void work() {
-		float[] real={-7,-7,-7,-7,-7,-7,-7,-7,-5,-5,-5,-5,-5,-5,-5,-5,-1,-1,-1,-1,-1,-1,-1,-1,-3,-3,-3,-3,-3,-3,-3,-3,7,7,7,7,7,7,7,7,5,5,5,5,5,5,5,5,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3};
-		float[] complex={-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3,-7,-5,-1,-3,7,5,1,3};
-		
-		int rel=Math.round(pop());
-		int img=Math.round(pop());
-		int start=0;
-		int within=0;
+		float[] real = { -7, -7, -7, -7, -7, -7, -7, -7, -5, -5, -5, -5, -5, -5, -5, -5, -1, -1, -1, -1, -1, -1, -1, -1,
+				-3, -3, -3, -3, -3, -3, -3, -3, 7, 7, 7, 7, 7, 7, 7, 7, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1,
+				3, 3, 3, 3, 3, 3, 3, 3 };
+		float[] complex = { -7, -5, -1, -3, 7, 5, 1, 3, -7, -5, -1, -3, 7, 5, 1, 3, -7, -5, -1, -3, 7, 5, 1, 3, -7, -5,
+				-1, -3, 7, 5, 1, 3, -7, -5, -1, -3, 7, 5, 1, 3, -7, -5, -1, -3, 7, 5, 1, 3, -7, -5, -1, -3, 7, 5, 1, 3,
+				-7, -5, -1, -3, 7, 5, 1, 3 };
+
+		int rel = Math.round(pop());
+		int img = Math.round(pop());
+		int start = 0;
+		int within = 0;
 		switch (rel) {
 		case -5:
 			start = 8;
@@ -66,14 +70,16 @@ public class Demodulator extends edu.mit.streamjit.api.Filter<Float, Byte> {
 			within = 0;
 
 		}
-		
-		int value=start+within;
-		for (int i = 0; i <6; i++) {
-			if(value%2==1)	push((byte)1);
-			else	push((byte)0);
-			
-			value=value/2;
+
+		int value = start + within;
+		for (int i = 0; i < 6; i++) {
+			if (value % 2 == 1)
+				push((byte) 1);
+			else
+				push((byte) 0);
+
+			value = value / 2;
 		}
-		
+
 	}
 }

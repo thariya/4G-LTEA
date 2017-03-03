@@ -8,11 +8,10 @@ import java.io.IOException;
 public class data_generator {
 
 	public static void main(String[] args) {
-		int data_length=132*10000;
-		
-		
-		FileOutputStream out=null;
-		FileInputStream in=null;
+		int data_length = 132 * 10000;
+
+		FileOutputStream out = null;
+		FileInputStream in = null;
 		try {
 			out = new FileOutputStream("src/edu/mit/streamjit/receiver/data.in");
 			in = new FileInputStream("src/edu/mit/streamjit/receiver/data.in");
@@ -20,17 +19,18 @@ public class data_generator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-				
+
 		for (int i = 0; i < data_length; i++) {
 			byte l;
-			if(Math.random()>0.5)	l=1;
-			else	l=0;
-			
+			if (Math.random() > 0.5)
+				l = 1;
+			else
+				l = 0;
+
 			try {
 				out.write(l);
-				System.out.print(l+" ");
-				int val=in.read();
+				System.out.print(l + " ");
+				int val = in.read();
 				System.out.println(val);
 			} catch (IOException e) {
 				e.printStackTrace();

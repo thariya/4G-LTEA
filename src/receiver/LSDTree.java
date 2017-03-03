@@ -1,6 +1,5 @@
 package receiver;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,22 +54,20 @@ public class LSDTree {
 		 */
 		for (int i = 0; i < 8; i++) {
 
-			level_values_next.add(count,
-					new Double[] { (calcValue(i, y, 0, root)), (double) i,
-							(double) 0 });
+			level_values_next.add(count, new Double[] { (calcValue(i, y, 0, root)), (double) i, (double) 0 });
 			count++;
 
 		}
 
 		// Collections.sort(level_values);
-		
+
 		Collections.sort(level_values_next, new Comparator<Double[]>() {
 
 			@Override
 			public int compare(Double[] arg0, Double[] arg1) {
 				// TODO Auto-generated method stubnt
 
-				if (Double.compare(arg0[0],arg1[0])>0) {
+				if (Double.compare(arg0[0], arg1[0]) > 0) {
 					return -1;
 				} else {
 					return 1;
@@ -98,12 +95,11 @@ public class LSDTree {
 
 		int count_cl = 0;
 
-		for (Iterator<Node> iterator = root.getnextlevel().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Node> iterator = root.getnextlevel().iterator(); iterator.hasNext();) {
 			Node node = (Node) iterator.next();
 			currentlevel.add(count_cl, new Node(0, null));
-			currentlevel.get(count_cl).copyNode(node.getNode_S(),
-					node.getvalue(), node.getparent(), node.getnextlevel());
+			currentlevel.get(count_cl).copyNode(node.getNode_S(), node.getvalue(), node.getparent(),
+					node.getnextlevel());
 			count_cl++;
 		}
 
@@ -148,39 +144,31 @@ public class LSDTree {
 		 * System.out.println("************************" + level);
 		 * System.out.println("Y : " + y);
 		 */
-		for (int j = 0; j < currentlevel.size() ; j++) {
+		for (int j = 0; j < currentlevel.size(); j++) {
 			current_node_val = currentlevel.get(j).getvalue();
 			for (int i = 0; i < 8; i++) {
 
-			//	System.out.print(" sent node : ");
+				// System.out.print(" sent node : ");
 				/*
 				 * currentlevel.get(j).getparent()
 				 * .findNode_with_S(currentlevel.get(j).getNode_S())
 				 * .printNumValue();
 				 */
-				level_values_next
-						.add(count,
-								new Double[] {
-										(calcValue(
-												i,
-												y,
-												level,
-												currentlevel
-														.get(j)
-														.getparent()
-														.findNode_with_S(
-																currentlevel
-																		.get(j)
-																		.getNode_S())) + current_node_val),
-										(double) i, (double) j });
-			
+				level_values_next.add(count,
+						new Double[] {
+								(calcValue(i, y, level,
+										currentlevel.get(j).getparent()
+												.findNode_with_S(currentlevel.get(j).getNode_S()))
+										+ current_node_val),
+								(double) i, (double) j });
+
 				count++;
 
 			}
 
 		}
-	//	System.out.println("level_values_next"+level_values_next.size());
-		
+		// System.out.println("level_values_next"+level_values_next.size());
+
 		Collections.sort(level_values_next, new Comparator<Double[]>() {
 
 			@Override
@@ -188,7 +176,6 @@ public class LSDTree {
 				// TODO Auto-generated method stubnt
 
 				return arg1[0].compareTo(arg0[0]);
-
 
 			}
 		});
@@ -215,19 +202,9 @@ public class LSDTree {
 				 * currentlevel.get(node_index), temp);
 				 */
 
-				currentlevel
-						.get(node_index)
-						.getparent()
-						.findNode_with_S(
-								currentlevel.get(node_index).getNode_S())
-						.addNodetonextlevel(
-								index,
-								currentlevel
-										.get(node_index)
-										.getparent()
-										.findNode_with_S(
-												currentlevel.get(node_index)
-														.getNode_S()), temp);
+				currentlevel.get(node_index).getparent().findNode_with_S(currentlevel.get(node_index).getNode_S())
+						.addNodetonextlevel(index, currentlevel.get(node_index).getparent()
+								.findNode_with_S(currentlevel.get(node_index).getNode_S()), temp);
 				// System.out.println(count_k+" : "+temp);
 			}
 
@@ -239,20 +216,16 @@ public class LSDTree {
 		// minNode.setvalue(999999999999999.9);
 
 		int count_nl = 0;
-		for (Iterator<Node> iterator = currentlevel.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Node> iterator = currentlevel.iterator(); iterator.hasNext();) {
 			Node node = (Node) iterator.next();
-			for (Iterator<Node> iterator2 = node.getnextlevel().iterator(); iterator2
-					.hasNext();) {
+			for (Iterator<Node> iterator2 = node.getnextlevel().iterator(); iterator2.hasNext();) {
 				Node node1 = (Node) iterator2.next();
 				if (minNode.getvalue() > node1.getvalue()) {
-					minNode.copyNode(node1.getNode_S(), node1.getvalue(),
-							node1.getparent());
+					minNode.copyNode(node1.getNode_S(), node1.getvalue(), node1.getparent());
 				}
 				// nextlevel.add(node1);
 				nextlevel.add(count_nl, new Node(0, null));
-				nextlevel.get(count_nl).copyNode(node1.getNode_S(),
-						node1.getvalue(), node1.getparent(),
+				nextlevel.get(count_nl).copyNode(node1.getNode_S(), node1.getvalue(), node1.getparent(),
 						node1.getnextlevel());
 				count_nl++;
 
@@ -261,18 +234,17 @@ public class LSDTree {
 		}
 		// Node temp_val=new Node(0, null);
 		// temp_val=minNode;
-		// System.out.print(" this level best  value : ");
+		// System.out.print(" this level best value : ");
 		// System.out.println(minNode.getvalue());
 		currentlevel.clear();
 		int count_cl = 0;
 
-		for (Iterator<Node> iterator = nextlevel.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Node> iterator = nextlevel.iterator(); iterator.hasNext();) {
 			Node node = (Node) iterator.next();
 			currentlevel.add(count_cl, new Node(0, null));
-			currentlevel.get(count_cl).copyNode(node.getNode_S(),
-					node.getvalue(), node.getparent(), node.getnextlevel());
-			
+			currentlevel.get(count_cl).copyNode(node.getNode_S(), node.getvalue(), node.getparent(),
+					node.getnextlevel());
+
 			count_cl++;
 		}
 		// int count_level = 1;
@@ -290,11 +262,12 @@ public class LSDTree {
 	public Node getMinnode() {
 		return minNode;
 	}
-	public void printcurrentlevel(){
-		int count=1;
+
+	public void printcurrentlevel() {
+		int count = 1;
 		for (Iterator<Node> iterator = currentlevel.iterator(); iterator.hasNext();) {
 			Node node = (Node) iterator.next();
-			System.out.print(count+" : ");
+			System.out.print(count + " : ");
 			node.printNumValue();
 			count++;
 		}
@@ -311,33 +284,34 @@ public class LSDTree {
 			value = (y - S_values[i] * R_mat.get(31, 31));
 			value = value * value;
 		} else {
-			//System.out.print("  level " + (level) + " : ");
-			
-			sum = S_temp * R_mat.get(31 - level, 31-level);
-			
-			//System.out.println("S_value " + S_temp + "\t j:-1");
-		//	System.out.print("          : ");
+			// System.out.print(" level " + (level) + " : ");
+
+			sum = S_temp * R_mat.get(31 - level, 31 - level);
+
+			// System.out.println("S_value " + S_temp + "\t j:-1");
+			// System.out.print(" : ");
 			S_temp = temp.getNode_S();
 			for (int j = 0; j < level; j++) {
-				sum = S_temp * R_mat.get(31 - level, 31 -level+ (j + 1)) + sum;
+				sum = S_temp * R_mat.get(31 - level, 31 - level + (j + 1)) + sum;
 
-			//	System.out.println("S_value " + S_temp + "\t j: " + j + " \t "
-				//		+ temp.getNode_S() + " " + temp.getvalue());
+				// System.out.println("S_value " + S_temp + "\t j: " + j + " \t
+				// "
+				// + temp.getNode_S() + " " + temp.getvalue());
 
-				//if (j != 0 && j < level) {
-				if ( j < level) {
-					temp.copyNode(temp.getparent().getNode_S(), temp
-							.getparent().getvalue(), temp.getparent()
-							.getparent());
-					
-					S_temp = temp.getNode_S();
-				}/* else if (j == 0) {
+				// if (j != 0 && j < level) {
+				if (j < level) {
+					temp.copyNode(temp.getparent().getNode_S(), temp.getparent().getvalue(),
+							temp.getparent().getparent());
 
 					S_temp = temp.getNode_S();
-				}*/
-			//	System.out.print("          : ");
+				} /*
+					 * else if (j == 0) {
+					 * 
+					 * S_temp = temp.getNode_S(); }
+					 */
+				// System.out.print(" : ");
 			}
-		//	System.out.println();
+			// System.out.println();
 			value = (y - sum) * (y - sum);
 		}
 
@@ -349,7 +323,7 @@ public class LSDTree {
 		return true;
 
 	}
-	
+
 	public class Node {
 		final int S_values[] = { -7, -5, -3, -1, 1, 3, 5, 7 };
 		private int S;
@@ -438,26 +412,23 @@ public class LSDTree {
 		public void printNumValue() {
 			System.out.println(S + " : " + value);
 		}
-		
-		void printParents(){
-			Node temp=new Node(1,null);
-			temp=parent;
-			while(temp!=null){
-				System.out.print("("+parent.getNode_S()+" : "+parent.getvalue()+") \t");
-				temp=temp.getparent();
+
+		void printParents() {
+			Node temp = new Node(1, null);
+			temp = parent;
+			while (temp != null) {
+				System.out.print("(" + parent.getNode_S() + " : " + parent.getvalue() + ") \t");
+				temp = temp.getparent();
 			}
 		}
-		
-
 
 		void printNodes() {
 
 			if (nextlevel.size() == 0) {
 				System.out.println("(" + S + " : " + value + ") ! ");
 			} else {
-				
-				for (Iterator<Node> iterator = nextlevel.iterator(); iterator
-						.hasNext();) {
+
+				for (Iterator<Node> iterator = nextlevel.iterator(); iterator.hasNext();) {
 					Node node = (Node) iterator.next();
 					System.out.print("  ---   ");
 					node.printNodes();
@@ -470,6 +441,4 @@ public class LSDTree {
 
 	}
 
-
 }
-
