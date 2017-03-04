@@ -1,5 +1,6 @@
 package receiver;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,7 +8,12 @@ import java.util.Iterator;
 
 import weka.core.matrix.Matrix;
 
-public class LSDTree {
+public class LSDTree implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3751814987341979037L;
 
 	private Node root;
 	private Node minNode;
@@ -324,7 +330,13 @@ public class LSDTree {
 
 	}
 
-	public class Node {
+	public class Node implements Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6772863151414039741L;
+
 		final int S_values[] = { -7, -5, -3, -1, 1, 3, 5, 7 };
 		private int S;
 

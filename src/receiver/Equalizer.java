@@ -1,5 +1,7 @@
 package receiver;
 
+import java.io.Serializable;
+
 import receiver.LSDTree.Node;
 import weka.core.matrix.Matrix;
 import weka.core.matrix.QRDecomposition;
@@ -356,7 +358,12 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		}
 	}
 
-	public static class Level {
+	public static class Level implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public LSDTree t;
 		public Matrix Y;
 

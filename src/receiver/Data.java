@@ -1,6 +1,14 @@
 package receiver;
 
-public class Data {
+import java.io.Serializable;
+
+public class Data implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8112877623525415460L;
+
 	public byte[] y;
 	public float[][] a;
 
