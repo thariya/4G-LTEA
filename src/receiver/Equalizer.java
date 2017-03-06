@@ -362,7 +362,7 @@ public class Equalizer extends edu.mit.streamjit.api.Pipeline<Float, Float> {
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -8768193973164309030L;
 
 		public LSDTree t;
 		public Matrix Y;
