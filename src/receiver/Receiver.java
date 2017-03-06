@@ -49,9 +49,10 @@ public class Receiver {
 	public static final class ReceiverKernel extends Pipeline<Float, Float> {
 
 		public ReceiverKernel() {
-			this.add(new DeMapper(), new Equalizer(), new Demodulator(), new TurboDecoder(), new BytePrinter());
+			// this.add(new DeMapper(), new Equalizer(), new Demodulator(), new
+			// TurboDecoder(), new BytePrinter());
+			this.add(new DeMapper(), new Equalizer(), new Demodulator(), new TurboDecoder());
 		}
-
 	}
 
 	private static class Add extends edu.mit.streamjit.api.Filter<Byte, Byte> {
