@@ -23,7 +23,7 @@ public class Transmitter {
 
 		// compile2streamcompiler
 		StreamCompiler sc = new Compiler2StreamCompiler();
-		Benchmarker.runBenchmark(new TransmitterBenchmark(), sc).get(0).print(System.out);
+		Benchmarker.runBenchmark(new LTETransmitterBenchmark(), sc).get(0).print(System.out);
 		// OneToOneElement<Byte, Byte> streamgraph = new Pipeline<>(new
 		// TurboEncoder(),new Modulator(),new AntennaArray());
 		// StreamCompiler compiler = new DebugStreamCompiler();
@@ -37,9 +37,9 @@ public class Transmitter {
 	}
 
 	@ServiceProvider(Benchmark.class)
-	public static final class TransmitterBenchmark extends SuppliedBenchmark {
-		public TransmitterBenchmark() {
-			super("Transmitter", TransmitterKernel.class, new Dataset("src/transmitter/data.in", (Input) Input
+	public static final class LTETransmitterBenchmark extends SuppliedBenchmark {
+		public LTETransmitterBenchmark() {
+			super("LTETransmitter", LTETransmitterKernel.class, new Dataset("src/transmitter/data.in", (Input) Input
 					.fromBinaryFile(Paths.get("src/transmitter/data.in"), Byte.class, ByteOrder.LITTLE_ENDIAN)
 			// ,
 			// (Supplier)Suppliers.ofInstance((Input)Input.fromBinaryFile(Paths.get("/home/jbosboom/streamit/streams/apps/benchmarks/asplos06/fft/streamit/FFT5.out"),
@@ -48,12 +48,11 @@ public class Transmitter {
 		}
 	}
 
-	public static final class TransmitterKernel extends Pipeline<Byte, Float> {
+	public static final class LTETransmitterKernel extends Pipeline<Byte, Float> {
 
-		public TransmitterKernel() {
+		public LTETransmitterKernel() {
 			this.add(new TurboEncoder(), new Modulator(), new AntennaArray());
 		}
-
 	}
 
 	private static class Add extends edu.mit.streamjit.api.Filter<Byte, Byte> {

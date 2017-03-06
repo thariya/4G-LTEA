@@ -23,7 +23,7 @@ public class Channel {
 
 		// compiler2streamcompiler
 		StreamCompiler sc = new DebugStreamCompiler();
-		Benchmarker.runBenchmark(new ChannelBenchmark(), sc).get(0).print(System.out);
+		Benchmarker.runBenchmark(new LTEChannelBenchmark(), sc).get(0).print(System.out);
 		// OneToOneElement<Byte, Byte> streamgraph = new Pipeline<>(new
 		// TurboEncoder(),new Modulator(),new AntennaArray());
 		// StreamCompiler compiler = new DebugStreamCompiler();
@@ -37,9 +37,9 @@ public class Channel {
 	}
 
 	@ServiceProvider(Benchmark.class)
-	public static final class ChannelBenchmark extends SuppliedBenchmark {
-		public ChannelBenchmark() {
-			super("Channel", ChannelKernel.class, new Dataset("src/channel/transmitter_out.out", (Input) Input
+	public static final class LTEChannelBenchmark extends SuppliedBenchmark {
+		public LTEChannelBenchmark() {
+			super("LTEChannel", LTEChannelKernel.class, new Dataset("src/channel/transmitter_out.out", (Input) Input
 					.fromBinaryFile(Paths.get("src/channel/transmitter_out.out"), Float.class, ByteOrder.BIG_ENDIAN)
 			// ,
 			// (Supplier)Suppliers.ofInstance((Input)Input.fromBinaryFile(Paths.get("/home/jbosboom/streamit/streams/apps/benchmarks/asplos06/fft/streamit/FFT5.out"),
@@ -48,9 +48,9 @@ public class Channel {
 		}
 	}
 
-	public static final class ChannelKernel extends Pipeline<Float, Float> {
+	public static final class LTEChannelKernel extends Pipeline<Float, Float> {
 
-		public ChannelKernel() {
+		public LTEChannelKernel() {
 			this.add(new Channel3(), new Filer("channel_out.out"));
 		}
 

@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import com.jeffreybosboom.serviceproviderprocessor.ServiceProvider;
 
-import channel.Channel.ChannelKernel;
+import channel.Channel.LTEChannelKernel;
 import edu.mit.streamjit.api.Input;
 import edu.mit.streamjit.api.Pipeline;
 import edu.mit.streamjit.api.StreamCompiler;
@@ -17,8 +17,8 @@ import edu.mit.streamjit.impl.compiler2.Compiler2StreamCompiler;
 import edu.mit.streamjit.test.Benchmark;
 import edu.mit.streamjit.test.Benchmarker;
 import edu.mit.streamjit.test.SuppliedBenchmark;
-import receiver.Receiver.ReceiverKernel;
-import transmitter.Transmitter.TransmitterKernel;
+import receiver.Receiver.LTEReceiverKernel;
+import transmitter.Transmitter.LTETransmitterKernel;
 
 public class LTE_A {
 
@@ -52,7 +52,7 @@ public class LTE_A {
 	public static final class LTEKernel extends Pipeline<Byte, Float> {
 
 		public LTEKernel() {
-			this.add(new BytePrinter(), new TransmitterKernel(), new ChannelKernel(), new ReceiverKernel());
+			this.add(new BytePrinter(), new LTETransmitterKernel(), new LTEChannelKernel(), new LTEReceiverKernel());
 		}
 
 	}

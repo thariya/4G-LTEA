@@ -21,7 +21,7 @@ public class Receiver {
 
 	public static void main(String[] args) throws InterruptedException {
 		StreamCompiler sc = new Compiler2StreamCompiler();
-		Benchmarker.runBenchmark(new ReceiverBenchmark(), sc).get(0).print(System.out);
+		Benchmarker.runBenchmark(new LTEReceiverBenchmark(), sc).get(0).print(System.out);
 		// OneToOneElement<Byte, Byte> streamgraph = new Pipeline<>(new
 		// TurboDecoder());
 		// StreamCompiler compiler = new DebugStreamCompiler();
@@ -35,9 +35,9 @@ public class Receiver {
 	}
 
 	@ServiceProvider(Benchmark.class)
-	public static final class ReceiverBenchmark extends SuppliedBenchmark {
-		public ReceiverBenchmark() {
-			super("Receiver", ReceiverKernel.class, new Dataset("src/receiver/channel_out.out", (Input) Input
+	public static final class LTEReceiverBenchmark extends SuppliedBenchmark {
+		public LTEReceiverBenchmark() {
+			super("LTEReceiver", LTEReceiverKernel.class, new Dataset("src/receiver/channel_out.out", (Input) Input
 					.fromBinaryFile(Paths.get("src/receiver/channel_out.out"), Float.class, ByteOrder.BIG_ENDIAN)
 			// ,
 			// (Supplier)Suppliers.ofInstance((Input)Input.fromBinaryFile(Paths.get("/home/jbosboom/streamit/streams/apps/benchmarks/asplos06/fft/streamit/FFT5.out"),
@@ -46,9 +46,9 @@ public class Receiver {
 		}
 	}
 
-	public static final class ReceiverKernel extends Pipeline<Float, Float> {
+	public static final class LTEReceiverKernel extends Pipeline<Float, Float> {
 
-		public ReceiverKernel() {
+		public LTEReceiverKernel() {
 			// this.add(new DeMapper(), new Equalizer(), new Demodulator(), new
 			// TurboDecoder(), new BytePrinter());
 			this.add(new DeMapper(), new Equalizer(), new Demodulator(), new TurboDecoder());

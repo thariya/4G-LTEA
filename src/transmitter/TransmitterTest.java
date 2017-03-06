@@ -25,7 +25,7 @@ public class TransmitterTest {
 						// Compiler2StreamCompiler();
 						sc.maxNumCores(i);
 						sc.multiplier(k);
-						Benchmarker.runBenchmark(new TransmitterBenchmarkTest(j), sc).get(0).print(System.out);
+						Benchmarker.runBenchmark(new LTETransmitterBenchmarkTest(j), sc).get(0).print(System.out);
 					}
 
 				}
@@ -45,9 +45,9 @@ public class TransmitterTest {
 	}
 
 	@ServiceProvider(Benchmark.class)
-	public static final class TransmitterBenchmarkTest extends SuppliedBenchmark {
-		public TransmitterBenchmarkTest(int j) {
-			super("Transmitter", TransmitterKernelTest.class, new Dataset("data.in", (Input) Datasets.nCopies(j,
+	public static final class LTETransmitterBenchmarkTest extends SuppliedBenchmark {
+		public LTETransmitterBenchmarkTest(int j) {
+			super("LTETransmitter", LTETransmitterKernel.class, new Dataset("data.in", (Input) Datasets.nCopies(j,
 					Input.fromBinaryFile(Paths.get("data.in"), Byte.class, ByteOrder.LITTLE_ENDIAN))
 			// ,
 			// (Supplier)Suppliers.ofInstance((Input)Input.fromBinaryFile(Paths.get("/home/jbosboom/streamit/streams/apps/benchmarks/asplos06/fft/streamit/FFT5.out"),
@@ -56,9 +56,9 @@ public class TransmitterTest {
 		}
 	}
 
-	public static final class TransmitterKernelTest extends Pipeline<Byte, Float> {
+	public static final class LTETransmitterKernel extends Pipeline<Byte, Float> {
 
-		public TransmitterKernelTest() {
+		public LTETransmitterKernel() {
 			this.add(new TurboEncoder(), new Modulator(), new AntennaArray());
 		}
 
